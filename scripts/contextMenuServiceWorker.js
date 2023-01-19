@@ -44,7 +44,7 @@ const generateCompletionAction = async (info) => {
     const prompt = `Generate a controversial take on the following topic: "${selectionText}".\n`;
     const { text } = await generate(prompt);
 
-    console.log(text);
+    sendMessage(text);
   } catch (error) {
     console.log(error);
   }
@@ -52,3 +52,18 @@ const generateCompletionAction = async (info) => {
 
 chrome.contextMenus.onClicked.addListener(generateCompletionAction);
 
+const sendMessage = (content) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const activeTab = tabs[0].id;
+
+    chrome.tabs.sendMessage(
+      activeTab,
+      { message: "inject", content },
+      (response) => {
+        if (response.status === "failed") {
+          console.log("injection failed.");
+        }
+      }
+    );
+  });
+};
