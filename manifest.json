@@ -16,5 +16,11 @@
   "background": {
     "service_worker": "scripts/contextMenuServiceWorker.js"
   },
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/"],
+      "js": ["scripts/content.js"]
+    }
+  ],
   "permissions": ["contextMenus", "tabs", "storage"]
 }
